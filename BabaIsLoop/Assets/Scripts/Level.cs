@@ -15,7 +15,10 @@ public class Level : MonoBehaviour
     public string opt3Text;
     public string opt1Value;
     public string opt2Value;
-    public string opt3Value; 
+    public string opt3Value;
+    public int opt1Index;
+    public int opt2Index;
+    public int opt3Index;
 
      
     void Start()

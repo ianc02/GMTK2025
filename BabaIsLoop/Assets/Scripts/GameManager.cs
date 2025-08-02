@@ -50,6 +50,13 @@ public class GameManager : MonoBehaviour
     public GameObject Option3Value;
     public GameObject ReverseButton;
 
+    public List<string> contextList = new List<string>();
+
+    public List<Color> optionColors = new List<Color>();
+
+    
+    
+
     public GameObject End;
 
     public GameObject LevelNum;
@@ -81,20 +88,20 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        hitpointValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().health,3).ToString();
-        damageValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().dmg,3).ToString();
-        speedValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().atkspd, 3).ToString();
-        reachValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().atkRad, 3).ToString();
-        luckValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().luck, 3).ToString();
-        difficultyValue.GetComponent<TextMeshProUGUI>().text = (player.GetComponent<PlayerBehavior>().enemyCount/100f).ToString();
+        hitpointValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().health,3).ToString("F2");
+        damageValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().dmg,3).ToString("F2");
+        speedValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().atkspd, 3).ToString("F2");
+        reachValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().atkRad, 3).ToString("F2");
+        luckValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().luckmult, 3).ToString("F2");
+        difficultyValue.GetComponent<TextMeshProUGUI>().text = (player.GetComponent<PlayerBehavior>().enemyCount/100f).ToString("F2");
         ReversalValue.GetComponent<TextMeshProUGUI>().text = player.GetComponent<PlayerBehavior>().reversal.ToString();
         if (player.GetComponent<PlayerBehavior>().stopRoundTime > player.GetComponent<PlayerBehavior>().startRoundTime)
         {
-            TimeValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().stopRoundTime - player.GetComponent<PlayerBehavior>().startRoundTime,3).ToString();
+            TimeValue.GetComponent<TextMeshProUGUI>().text = Math.Round(player.GetComponent<PlayerBehavior>().stopRoundTime - player.GetComponent<PlayerBehavior>().startRoundTime,3).ToString("F2");
         }
         else
         {
-            TimeValue.GetComponent<TextMeshProUGUI>().text = Math.Round(Time.time - player.GetComponent<PlayerBehavior>().startRoundTime,3).ToString();
+            TimeValue.GetComponent<TextMeshProUGUI>().text = Math.Round(Time.time - player.GetComponent<PlayerBehavior>().startRoundTime,3).ToString("F2");
         }
         LevelNum.GetComponent<TextMeshProUGUI>().text = lvl.ToString();
 
@@ -103,12 +110,9 @@ public class GameManager : MonoBehaviour
 
     public void GenerateNext(bool reversed)
     {
-        StartCoroutine(wfs(0.5f));
+        
 
-        while (!continueWFS)
-        {
-
-        }
+        
         if (!reversed)
         {
             if (lvl == 100)
@@ -250,7 +254,7 @@ public class GameManager : MonoBehaviour
         }
         Options.active = false;
         player.GetComponent<PlayerBehavior>().reversal -= 1;
-        GenerateNext(true);
+        StartCoroutine(wfs(0.5f, true));
     }
     public void statChangeButtonCall(int option)
     {
@@ -310,51 +314,72 @@ public class GameManager : MonoBehaviour
         {
             GameObject child = Options.transform.GetChild(i).gameObject;
             c++;
+            int ind;
             GameObject butn = child.transform.GetChild(0).gameObject;
+            butn.GetComponent<Button>().interactable = true; ;
             if (UnityEngine.Random.Range(0, 100) < luck)
             {
-                    butn.GetComponent<Button>().interactable = true;    
                     int opt = UnityEngine.Random.Range(0, 3);
                     if (opt == 0)
                     {
-                        
-                        
-                        butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = basicOptions[UnityEngine.Random.Range(0, 4)];
-                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Round(UnityEngine.Random.Range(1.3f,1.7f),2).ToString();
-                        
+
+                        int j = UnityEngine.Random.Range(0, 4);
+                        butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = basicOptions[j];
+                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Round(UnityEngine.Random.Range(1.2f,1.6f),2).ToString("F2");
+                    
+                        butn.GetComponent<Image>().color = optionColors[j];
+                        butn.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = contextList[j];
+                    ind = j;
+
+
 
                     }
                     else if (opt == 1)
                     {
                         butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Luck";
-                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Round(UnityEngine.Random.Range(1.3f, 1.7f),2).ToString();
-                    }
-                    else if (opt == 2)
+                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Round(UnityEngine.Random.Range(0.8f, 1.2f),2).ToString("F2");
+                        butn.GetComponent<Image>().color = optionColors[4];
+                    butn.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = contextList[4];
+                    ind = 4;
+                }
+                    else 
                     {
                         butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Reversal";
-                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Max(1,Math.Floor(player.GetComponent<PlayerBehavior>().luck/10f)).ToString();
-                    }
+                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Max(1,Math.Floor(player.GetComponent<PlayerBehavior>().luck/10f)).ToString("F2");
+                        butn.GetComponent<Image>().color = optionColors[6];
+                        butn.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = contextList[6];
+                    ind = 6;
+                }
                 
             }
             else
             {
-                butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = basicOptions[UnityEngine.Random.Range(0, 4)];
-                butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Round(UnityEngine.Random.Range(1.1f, 1.3f),2).ToString();
+                int j = UnityEngine.Random.Range(0, 4);
+                butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = basicOptions[j];
+                butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Round(UnityEngine.Random.Range(1.05f, 1.2f),2).ToString("F2");
+                butn.GetComponent<Image>().color = optionColors[j];
+                butn.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = contextList[j];
+                ind = j;
+                
             }
             if (c == 1)
             {
                 newLevel.opt1Text = butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text;
                 newLevel.opt1Value = butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text;
+                newLevel.opt1Index = ind;
             }
             if (c == 2)
             {
                 newLevel.opt2Text = butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text;
                 newLevel.opt2Value = butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text;
+                newLevel.opt2Index = ind;
             }
             if (c == 3)
             {
                 newLevel.opt3Text = butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text;
                 newLevel.opt3Value = butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text;
+                newLevel.opt3Index = ind;
+
             }
 
         }
@@ -378,6 +403,8 @@ public class GameManager : MonoBehaviour
                 {
                     butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = levels[lvl].opt1Text;
                     butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = levels[lvl].opt1Value;
+                    butn.GetComponent<Image>().color = optionColors[levels[lvl].opt1Index];
+                    butn.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = contextList[levels[lvl].opt1Index];
                     if (levels[lvl].opt1Picked)
                     {
                         butn.GetComponent<Button>().interactable = false;
@@ -388,6 +415,8 @@ public class GameManager : MonoBehaviour
                 {
                     butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = levels[lvl].opt2Text;
                     butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = levels[lvl].opt2Value;
+                    butn.GetComponent<Image>().color = optionColors[levels[lvl].opt2Index];
+                    butn.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = contextList[levels[lvl].opt2Index];
                     if (levels[lvl].opt2Picked)
                     {
                         butn.GetComponent<Button>().interactable = false;
@@ -398,6 +427,8 @@ public class GameManager : MonoBehaviour
                 {
                     butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = levels[lvl].opt3Text;
                     butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = levels[lvl].opt3Value;
+                    butn.GetComponent<Image>().color = optionColors[levels[lvl].opt3Index];
+                    butn.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = contextList[levels[lvl].opt3Index];
                     if (levels[lvl].opt3Picked)
                     {
                         butn.GetComponent<Button>().interactable = false;
@@ -407,20 +438,20 @@ public class GameManager : MonoBehaviour
                 cnt += 1;
             }
         }
+        player.GetComponent<PlayerBehavior>().updateLuck();
 
     }
-    IEnumerator wfs(float seconds)
+    IEnumerator wfs(float seconds, bool reverse)
     {
-        continueWFS = false;
         yield return new WaitForSeconds(seconds);
-        continueWFS = true;
-        StopCoroutine(wfs(0));
+        GenerateNext(reverse);
+        StopCoroutine(wfs(0, reverse));
     }
     public void optionChose()
     {
         
         Options.active = false;
-        GenerateNext(false);
+        StartCoroutine(wfs(0.5f, false));
     }
 
     public void playSound(string soundName)

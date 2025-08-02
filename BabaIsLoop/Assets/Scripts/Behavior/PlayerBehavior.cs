@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class PlayerBehavior : MonoBehaviour
     public float startRoundTime;
     public float stopRoundTime;
     public float luckmult;
+    public GameObject ReachLight;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -122,6 +124,7 @@ public class PlayerBehavior : MonoBehaviour
         }
         if (stat == "Reach")
             atkRad *= value;
+            ReachLight.GetComponent<Light2D>().pointLightOuterRadius = atkRad;
         if (stat == "Luck")
         {
             luckmult *= value;
