@@ -103,7 +103,7 @@ public class PlayerBehavior : MonoBehaviour
         gameObject.active = active;
     }
 
-
+     
     public void statChange(string stat, float value)
     {
         if (stat == "Health")

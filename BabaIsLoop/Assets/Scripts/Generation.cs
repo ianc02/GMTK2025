@@ -46,7 +46,7 @@ public class Generation : MonoBehaviour
         
         for (int i = -5; i < 5; i++)
         {
-            
+             
             
             Basemap.SetTile(new Vector3Int(cellPos.x+diff, cellPos.y + i,0), BackgroundImages[GetRandomBackTile()]);
         }

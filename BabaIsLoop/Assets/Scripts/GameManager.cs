@@ -230,7 +230,7 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
         }
     }
-    public void reverse()
+    public void reverse() 
     {
         if (lvl == 0)
         {
