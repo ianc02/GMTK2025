@@ -43,6 +43,7 @@ public class EnemyBehavior : MonoBehaviour
         }
         if (health <= 0)
         {
+            GameManager.Instance.playSound("kill");
             Destroy(gameObject);
         }
 
@@ -51,6 +52,7 @@ public class EnemyBehavior : MonoBehaviour
     public void AlterHealth(float diff)
     {
         health += diff;
+        GameManager.Instance.playSound("hit");
     }
 
 

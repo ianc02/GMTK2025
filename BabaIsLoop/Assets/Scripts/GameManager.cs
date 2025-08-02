@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public int lvl = 0;
     public GameObject BasicBitchPrefab;
 
+    public GameObject AudMan;
+
 
     //UI
     public Canvas canvas;
@@ -51,6 +53,8 @@ public class GameManager : MonoBehaviour
     public GameObject End;
 
     public GameObject LevelNum;
+
+    private bool continueWFS;
 
     public List<Level> levels;
     private bool justStarted = true;
@@ -99,6 +103,12 @@ public class GameManager : MonoBehaviour
 
     public void GenerateNext(bool reversed)
     {
+        StartCoroutine(wfs(0.5f));
+
+        while (!continueWFS)
+        {
+
+        }
         if (!reversed)
         {
             if (lvl == 100)
@@ -127,6 +137,7 @@ public class GameManager : MonoBehaviour
         {
             Grid.GetComponent<Generation>().GenerateNext(c,true);
             c--;
+            playSound("left");
             yield return new WaitForSeconds(0.25f);
         }
         player.GetComponent<PlayerBehavior>().setPlayerActive(true);
@@ -144,6 +155,7 @@ public class GameManager : MonoBehaviour
         {
             Grid.GetComponent<Generation>().GenerateNext(c,false);
             c++;
+            playSound("right");
             yield return new WaitForSeconds(0.125f);
         }
         player.GetComponent<PlayerBehavior>().setPlayerActive(true);
@@ -397,10 +409,22 @@ public class GameManager : MonoBehaviour
         }
 
     }
-
+    IEnumerator wfs(float seconds)
+    {
+        continueWFS = false;
+        yield return new WaitForSeconds(seconds);
+        continueWFS = true;
+        StopCoroutine(wfs(0));
+    }
     public void optionChose()
     {
+        
         Options.active = false;
         GenerateNext(false);
+    }
+
+    public void playSound(string soundName)
+    {
+        AudMan.GetComponent<AudioManager>().playAudioClip(soundName);
     }
 }
