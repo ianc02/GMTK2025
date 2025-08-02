@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
         if (won)
         {
             End.GetComponent<TextMeshProUGUI>().text = "!!!WIN!!!";
-            Time.timeScale = 0;
+            Time.timeScale = 0; 
         }
         else
         {

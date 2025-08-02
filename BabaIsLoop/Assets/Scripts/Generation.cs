@@ -40,7 +40,7 @@ public class Generation : MonoBehaviour
             cam.transform.position += Vector3.right;
             diff = 6;
         }
-        
+         
         step = step % 7;
         Vector3Int cellPos = Basemap.WorldToCell(cam.transform.position);
         

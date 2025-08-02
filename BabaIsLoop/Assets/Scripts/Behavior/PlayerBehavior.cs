@@ -95,7 +95,7 @@ public class PlayerBehavior : MonoBehaviour
             GameManager.Instance.showEnd(false);
         }
     }
-    public void updateJustWon(bool val){
+    public void updateJustWon(bool val){ 
         JustWon = val;  
     }
     public void setPlayerActive(bool active)

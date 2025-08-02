@@ -14,7 +14,7 @@ public class EnemyBehavior : MonoBehaviour
     public float atkRad;
 
     NavMeshAgent agent;
-    void Start()
+    void Start() 
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed;
