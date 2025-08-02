@@ -27,39 +27,41 @@ public class Generation : MonoBehaviour
         
     }
 
-    void GenerateNext(int step)
+    public void GenerateNext(int step)
     {
+        cam.transform.position += Vector3.right;
         step = step % 7;
         Vector3Int cellPos = Basemap.WorldToCell(cam.transform.position);
+        int diff = 6;
         for (int i = -5; i < 5; i++)
         {
             
             
-            Basemap.SetTile(new Vector3Int(cellPos.x, cellPos.y + i,0), BackgroundImages[GetRandomBackTile()]);
+            Basemap.SetTile(new Vector3Int(cellPos.x+diff, cellPos.y + i,0), BackgroundImages[GetRandomBackTile()]);
         }
         if (step == 0)
         {
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y + 1, 0), MainDungeonSprites[0]);
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y , 0), MainDungeonSprites[1]);
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y -1, 0), MainDungeonSprites[2]);
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y -2, 0), MainDungeonSprites[3]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y + 1, 0), MainDungeonSprites[0]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y , 0), MainDungeonSprites[1]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y -1, 0), MainDungeonSprites[2]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y -2, 0), MainDungeonSprites[3]);
         }
         if (step == 1)
         {
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y, 0), MainDungeonSprites[0]);
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y - 1, 0), MainDungeonSprites[3]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y, 0), MainDungeonSprites[0]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y - 1, 0), MainDungeonSprites[3]);
         }
         if (step == 5)
         {
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y, 0), MainDungeonSprites[4]);
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y - 1, 0), MainDungeonSprites[5]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y, 0), MainDungeonSprites[4]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y - 1, 0), MainDungeonSprites[5]);
         }
         if (step == 6)
         {
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y + 1, 0), MainDungeonSprites[4]);
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y, 0), MainDungeonSprites[6]);
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y - 1, 0), MainDungeonSprites[7]);
-            Mainmap.SetTile(new Vector3Int(cellPos.x, cellPos.y - 2, 0), MainDungeonSprites[5]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y + 1, 0), MainDungeonSprites[4]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y, 0), MainDungeonSprites[6]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y - 1, 0), MainDungeonSprites[7]);
+            Mainmap.SetTile(new Vector3Int(cellPos.x + diff, cellPos.y - 2, 0), MainDungeonSprites[5]);
         }
     }
 
