@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour
     public GameObject Option3Value;
     public GameObject ReverseButton;
 
+    public GameObject End;
+
     public GameObject LevelNum;
 
     public List<Level> levels;
@@ -90,7 +92,8 @@ public class GameManager : MonoBehaviour
         {
             TimeValue.GetComponent<TextMeshProUGUI>().text = Math.Round(Time.time - player.GetComponent<PlayerBehavior>().startRoundTime,3).ToString();
         }
-        
+        LevelNum.GetComponent<TextMeshProUGUI>().text = lvl.ToString();
+
 
     }
 
@@ -98,6 +101,10 @@ public class GameManager : MonoBehaviour
     {
         if (!reversed)
         {
+            if (lvl == 100)
+            {
+                showEnd(true);
+            }
             lvl += 1;
             LevelNum.GetComponent<TextMeshProUGUI>().text = lvl.ToString();
             StartCoroutine(GenNextSteps());
@@ -137,10 +144,17 @@ public class GameManager : MonoBehaviour
         {
             Grid.GetComponent<Generation>().GenerateNext(c,false);
             c++;
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.125f);
         }
         player.GetComponent<PlayerBehavior>().setPlayerActive(true);
-        spawnEnemies(0);
+        if (lvl > levels.Count - 1)
+        {
+            spawnEnemies(0);
+        }
+        else
+        {
+            spawnEnemies(levels[lvl].numenemies);
+        }
         player.GetComponent<PlayerBehavior>().updateJustWon(false);
         //player.GetComponent<PlayerBehavior>().health = player.GetComponent<PlayerBehavior>().maxHealth;
         player.GetComponent<PlayerBehavior>().startRoundTime = Time.time;
@@ -201,8 +215,27 @@ public class GameManager : MonoBehaviour
         
         }
     }
+
+    public void showEnd(bool won)
+    {
+        End.active = true;
+        if (won)
+        {
+            End.GetComponent<TextMeshProUGUI>().text = "!!!WIN!!!";
+            Time.timeScale = 0;
+        }
+        else
+        {
+            End.GetComponent<TextMeshProUGUI>().text = "Lose :(";
+            Time.timeScale = 0;
+        }
+    }
     public void reverse()
     {
+        if (lvl == 0)
+        {
+            showEnd(true);
+        }
         Options.active = false;
         player.GetComponent<PlayerBehavior>().reversal -= 1;
         GenerateNext(true);
@@ -213,16 +246,19 @@ public class GameManager : MonoBehaviour
         {
             player.GetComponent<PlayerBehavior>().statChange(Option1Name.GetComponent<TextMeshProUGUI>().text, float.Parse(Option1Value.GetComponent<TextMeshProUGUI>().text));
             levels[lvl].opt1Picked = true;
+           
         }
         else if (option == 2)
         {
             player.GetComponent<PlayerBehavior>().statChange(Option2Name.GetComponent<TextMeshProUGUI>().text, float.Parse(Option2Value.GetComponent<TextMeshProUGUI>().text));
             levels[lvl].opt2Picked = true;
+            
         }
         else if (option == 3)
         {
             player.GetComponent<PlayerBehavior>().statChange(Option3Name.GetComponent<TextMeshProUGUI>().text, float.Parse(Option3Value.GetComponent<TextMeshProUGUI>().text));
             levels[lvl].opt3Picked = true;
+            
 
         }
         optionChose();
@@ -265,7 +301,7 @@ public class GameManager : MonoBehaviour
             GameObject butn = child.transform.GetChild(0).gameObject;
             if (UnityEngine.Random.Range(0, 100) < luck)
             {
-                
+                    butn.GetComponent<Button>().interactable = true;    
                     int opt = UnityEngine.Random.Range(0, 3);
                     if (opt == 0)
                     {
@@ -284,7 +320,7 @@ public class GameManager : MonoBehaviour
                     else if (opt == 2)
                     {
                         butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Reversal";
-                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Max(1,player.GetComponent<PlayerBehavior>().luckmult/10f).ToString();
+                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Max(1,Math.Floor(player.GetComponent<PlayerBehavior>().luck/10f)).ToString();
                     }
                 
             }
@@ -310,7 +346,7 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        if (lvl > levels.Count-1 || (lvl==0 && justStarted))
+        if (lvl > levels.Count-1)
         {
             justStarted = false;
             newLevel.index = lvl;
@@ -333,6 +369,7 @@ public class GameManager : MonoBehaviour
                     if (levels[lvl].opt1Picked)
                     {
                         butn.GetComponent<Button>().interactable = false;
+                        
                     }
                 }
                 if (cnt == 1)
@@ -342,6 +379,7 @@ public class GameManager : MonoBehaviour
                     if (levels[lvl].opt2Picked)
                     {
                         butn.GetComponent<Button>().interactable = false;
+                       
                     }
                 }
                 if (cnt == 2)
@@ -351,6 +389,7 @@ public class GameManager : MonoBehaviour
                     if (levels[lvl].opt3Picked)
                     {
                         butn.GetComponent<Button>().interactable = false;
+                        
                     }
                 }
                 cnt += 1;

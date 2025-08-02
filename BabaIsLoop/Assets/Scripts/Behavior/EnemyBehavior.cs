@@ -51,7 +51,6 @@ public class EnemyBehavior : MonoBehaviour
     public void AlterHealth(float diff)
     {
         health += diff;
-        Debug.Log(health);
     }
 
 

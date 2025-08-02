@@ -90,6 +90,10 @@ public class PlayerBehavior : MonoBehaviour
     public void AlterHealth(float diff)
     {
         health += diff; 
+        if (health <= 0)
+        {
+            GameManager.Instance.showEnd(false);
+        }
     }
     public void updateJustWon(bool val){
         JustWon = val;  
