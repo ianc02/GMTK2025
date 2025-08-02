@@ -24,6 +24,7 @@ public class PlayerBehavior : MonoBehaviour
     public int enemyCount;
     public float startRoundTime;
     public float stopRoundTime;
+    public float luckmult;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -38,10 +39,11 @@ public class PlayerBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         //Vector2 direction = (Vector2)(player.transform.position-transform.position).normalized;
         //transform.position += (Vector3)direction * moveSpeed * Time.deltaTime;
         enemies.Clear();
-
+        agent.speed = moveSpeed;
         foreach(Transform child in EnemiesHolder.transform)
         {
 
@@ -62,9 +64,9 @@ public class PlayerBehavior : MonoBehaviour
                 }
             }
             agent.SetDestination(pos);
-            if (Vector3.Distance(transform.position, pos) < atkRad)
+            if (Vector3.Distance(transform.position, pos) <= atkRad)
             {
-                if (Time.time - lastAtkTime > atkspd)
+                if ((Time.time - lastAtkTime)*atkspd > 1)
                 {
                     lastAtkTime = Time.time;
                     enemy.GetComponent<EnemyBehavior>().AlterHealth(-dmg);
@@ -112,7 +114,15 @@ public class PlayerBehavior : MonoBehaviour
         if (stat == "Speed")
         {
             atkspd *= value;
+            moveSpeed *= value;
         }
+        if (stat == "Reach")
+            atkRad *= value;
+        if (stat == "Luck")
+        {
+            luckmult *= value;
+        }
+
         if (stat == "Reversal")
         {
             reversal += Mathf.RoundToInt(value) ;
@@ -122,7 +132,7 @@ public class PlayerBehavior : MonoBehaviour
 
     public void updateLuck()
     {
-        luck = (enemyCount / 100f) + (health / maxHealth) + (3 - (startRoundTime - stopRoundTime)) + GameManager.Instance.level;
+        luck =  ((enemyCount / 100f) + (health / maxHealth) + (8 - (stopRoundTime - startRoundTime)) + GameManager.Instance.lvl)*luckmult;
     }
 
 }

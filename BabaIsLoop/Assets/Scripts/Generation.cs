@@ -27,12 +27,23 @@ public class Generation : MonoBehaviour
         
     }
 
-    public void GenerateNext(int step)
+    public void GenerateNext(int step, bool rev)
     {
-        cam.transform.position += Vector3.right;
+        int diff;
+        if (rev)
+        {
+            cam.transform.position -= Vector3.right;
+            diff = -7;
+        }
+        else
+        {
+            cam.transform.position += Vector3.right;
+            diff = 6;
+        }
+        
         step = step % 7;
         Vector3Int cellPos = Basemap.WorldToCell(cam.transform.position);
-        int diff = 6;
+        
         for (int i = -5; i < 5; i++)
         {
             
