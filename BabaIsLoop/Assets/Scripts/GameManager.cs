@@ -337,7 +337,7 @@ public class GameManager : MonoBehaviour
                     else if (opt == 1)
                     {
                         butn.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "Luck";
-                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Round(UnityEngine.Random.Range(0.8f, 1.2f),2).ToString("F2");
+                        butn.transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>().text = Math.Round(UnityEngine.Random.Range(1.05f, 1.2f),2).ToString("F2");
                         butn.GetComponent<Image>().color = optionColors[4];
                     butn.transform.GetChild(2).gameObject.GetComponent<TextMeshProUGUI>().text = contextList[4];
                     ind = 4;
